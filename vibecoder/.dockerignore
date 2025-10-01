@@ -1,0 +1,44 @@
+# flyctl launch added from .gitignore
+# Node
+**/node_modules
+**/.next
+**/.env.local
+
+# Python
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/*.sqlite3
+**/*.db
+
+# Virtualenvs
+**/.env
+**/.venv
+
+# Editors
+**/.vscode
+**/.idea
+
+# Artifacts
+**/*.log
+**/artifacts
+**/dist
+**/.pytest_cache
+**/.DS_Store
+
+# Docker
+**/*.pid
+
+
+# flyctl launch added from .venv/.gitignore
+.venv/**/*
+
+# flyctl launch added from backend/.pytest_cache/.gitignore
+# Created by pytest automatically.
+backend/.pytest_cache/**/*
+
+# flyctl launch added from worker/.pytest_cache/.gitignore
+# Created by pytest automatically.
+worker/.pytest_cache/**/*
+fly.toml
