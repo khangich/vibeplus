@@ -23,7 +23,7 @@ fly postgres create --name vibecoder-pg --region sjc
 fly redis create --name vibecoder-redis --region sjc
 
 # backend
-fly launch --name vibecoder-backend --region sjc
+fly launch --name vibecoder-backend-plus --region sjc
 fly postgres attach vibecoder-pg
 fly redis attach vibecoder-redis
 fly secrets set OBJECT_STORAGE_* ...
@@ -37,7 +37,7 @@ fly deploy
 
 # frontend
 fly launch --name vibecoder-frontend --region sjc
-fly secrets set NEXT_PUBLIC_BACKEND_URL=https://vibecoder-backend.fly.dev
+fly secrets set NEXT_PUBLIC_BACKEND_URL=https://vibecoder-backend-plus.fly.dev
 fly deploy
 ```
 

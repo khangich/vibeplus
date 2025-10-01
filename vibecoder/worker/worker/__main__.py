@@ -5,7 +5,7 @@ from typing import Any, Optional
 
 from rq import Connection, Queue, Worker
 
-from backend.backend.db import get_redis
+from worker.redis_client import get_redis
 from .logger import get_logger
 
 listen_queues = ["default"]
