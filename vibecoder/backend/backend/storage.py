@@ -48,6 +48,24 @@ def put_bytes(path: str, data: bytes, content_type: str = "application/octet-str
     return path
 
 
+def get_bytes(path: str) -> bytes:
+    ensure_bucket()
+    try:
+        obj = _client.get_object(_settings.object_storage_bucket, path)
+    except Exception:
+        target = _fallback_root / path
+        if not target.exists():
+            raise FileNotFoundError(path)
+        return target.read_bytes()
+
+    try:
+        data = obj.read()
+    finally:
+        obj.close()
+        obj.release_conn()
+    return data
+
+
 def get_signed_url(path: str, expires: int = 3600) -> str:
     ensure_bucket()
     try:

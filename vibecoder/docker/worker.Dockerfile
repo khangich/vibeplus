@@ -2,8 +2,7 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY worker/pyproject.toml worker/pyproject.toml
-COPY worker/worker worker/worker
+COPY worker/ worker/
 COPY backend/backend backend/backend
 COPY backend/pyproject.toml backend/pyproject.toml
 

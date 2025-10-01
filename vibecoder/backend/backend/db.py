@@ -25,7 +25,9 @@ def get_session() -> Generator[Session, None, None]:
 
 
 def get_redis() -> Redis:
-    return Redis.from_url(_settings.redis_url, decode_responses=True)
+    # RQ stores job payloads as pickled bytes, so we must keep Redis responses
+    # binary; enabling response decoding breaks job deserialization.
+    return Redis.from_url(_settings.redis_url, decode_responses=False)
 
 
 def get_queue(name: str = "default") -> Queue:
