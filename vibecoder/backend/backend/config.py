@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     backend_port: int = 8000
-    database_url: str = "sqlite:///./vibecoder.db"
+    database_url: str = "postgresql+psycopg2://vibecoder:vibecoder@localhost:5432/vibecoder"
     redis_url: str = "redis://localhost:6379/0"
     object_storage_endpoint: str = "http://localhost:9000"
     object_storage_bucket: str = "vibecoder"

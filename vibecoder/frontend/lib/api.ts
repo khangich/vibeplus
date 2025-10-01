@@ -1,4 +1,11 @@
-const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+const PUBLIC_API_BASE =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+const INTERNAL_API_BASE =
+  process.env.BACKEND_INTERNAL_URL || PUBLIC_API_BASE;
+
+function resolveApiBase() {
+  return typeof window === "undefined" ? INTERNAL_API_BASE : PUBLIC_API_BASE;
+}
 
 async function handleResponse(res: Response) {
   if (!res.ok) {
@@ -13,7 +20,8 @@ async function handleResponse(res: Response) {
 }
 
 export async function fetchJSON<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${path.startsWith("/") ? path : `/${path}`}`, {
+  const apiBase = resolveApiBase();
+  const res = await fetch(`${apiBase}${path.startsWith("/") ? path : `/${path}`}`, {
     ...init,
     headers: {
       "Content-Type": "application/json",
@@ -30,4 +38,3 @@ export async function postJSON<T>(path: string, body: unknown): Promise<T> {
     body: JSON.stringify(body),
   });
 }
-

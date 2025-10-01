@@ -2,8 +2,9 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY frontend/package.json frontend/package.json
-COPY frontend/package-lock.json frontend/package-lock.json 2>/dev/null || true
+# Copy package manifests first to leverage Docker layer caching; the glob
+# allows the build to succeed even when no lockfile is present.
+COPY frontend/package*.json ./
 COPY frontend .
 
 RUN npm install --legacy-peer-deps

@@ -5,7 +5,7 @@ Vibecoder is a minimal viable product for a "vibe coding" platform that helps us
 ## Features
 
 - Prompt driven project generation with mock LLM planner/scaffolder
-- Revision tracking backed by SQLite and Redis
+- Revision tracking backed by Postgres and Redis
 - Async build pipeline that produces previews and downloadable artifacts
 - Passwordless auth stubs with Supabase/Clerk adapters (placeholders)
 - Rate limiting per user using Redis token buckets
@@ -27,7 +27,9 @@ Copy the example environment file and adjust values as needed:
 cp .env.example .env
 ```
 
-Ensure the `NEXT_PUBLIC_BACKEND_URL` points to the backend service (`http://localhost:8000` in local compose).
+Ensure the `NEXT_PUBLIC_BACKEND_URL` points to the backend service (`http://localhost:8000` when accessed from your browser).
+
+For server-side data fetching inside docker-compose, the frontend container reads `BACKEND_INTERNAL_URL`. Leave it empty for host-based development or set it to `http://backend:8000` (the docker service name) when running the full stack.
 
 ### Local Development
 
@@ -42,6 +44,7 @@ Services:
 - Frontend: http://localhost:8080
 - Backend API docs: http://localhost:8000/docs
 - Redis: redis://localhost:6379/0
+- Postgres: postgres://vibecoder:vibecoder@localhost:5432/vibecoder
 - MinIO console: http://localhost:9001 (credentials in `.env.example`)
 
 Once the stack is up you can use the UI to enter a prompt, choose a vibe, and generate a project. The mock LLM returns deterministic scaffolds so the pipeline completes quickly. Build logs and artifacts are available from the revision detail page.
@@ -80,4 +83,3 @@ The worker currently uses a deterministic mock (`backend.backend.llm.mock`). Rep
 ## Repository Structure
 
 See the prompt for the detailed file tree. Each directory contains README-worthy comments inline for clarity.
-
