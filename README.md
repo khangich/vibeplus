@@ -25,7 +25,7 @@ fly redis create --name vibecoder-redis --region sjc
 # backend
 fly launch --name vibecoder-backend-plus --region sjc
 fly postgres attach vibecoder-pg
-fly redis attach vibecoder-redis
+fly secrets set --app vibecoder-worker-plus REDIS_URL="redis://default:password@fly-vibecoder-redis.upstash.io:6379"
 fly secrets set OBJECT_STORAGE_* ...
 fly deploy
 
