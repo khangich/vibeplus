@@ -1,12 +1,16 @@
+# docker/backend.Dockerfile
 FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY backend/pyproject.toml backend/pyproject.toml
-COPY backend/backend backend/backend
+# Copy only what's needed to install the backend package
+# These paths are relative to the build context (vibecoder/backend)
+COPY pyproject.toml ./pyproject.toml
+COPY backend ./backend
 
-RUN pip install --no-cache-dir pip setuptools wheel
-RUN pip install --no-cache-dir -e backend
+# Install
+RUN pip install --no-cache-dir -U pip setuptools wheel
+RUN pip install --no-cache-dir -e .
 
-ENV PYTHONPATH=/app
-CMD ["uvicorn", "backend.backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run API
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
