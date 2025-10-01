@@ -9,9 +9,13 @@ type Project = {
   created_at: string;
 };
 
+const PUBLIC_API_BASE =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
+
 async function getProjects(): Promise<Project[]> {
   try {
-    const data = await fetchJSON<Project[]>("/projects");
+    const data = await fetchJSON<Project[]>(`/projects`);
     return data;
   } catch (err) {
     console.error("Failed to load projects", err);

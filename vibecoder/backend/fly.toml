@@ -11,6 +11,10 @@ primary_region = 'sjc'
 
 [env]
   BACKEND_PORT = '8000'
+  PREVIEW_BASE_HOST = "preview.${FLY_APP_NAME}.fly.dev"
+  # S3/R2 endpoints (set secrets below), frontend will call this:
+  CORS_ORIGINS = "https://vibe.llmlab.io,https://vibecoder-frontend-plus.fly.dev"
+
 
 [http_service]
   internal_port = 8000

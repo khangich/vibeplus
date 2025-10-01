@@ -1,5 +1,6 @@
 const PUBLIC_API_BASE =
   process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
 const INTERNAL_API_BASE =
   process.env.BACKEND_INTERNAL_URL || PUBLIC_API_BASE;
 

@@ -9,6 +9,10 @@ interface ProjectDetail {
   created_at: string;
 }
 
+const PUBLIC_API_BASE =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
+
 async function getProject(projectId: string): Promise<ProjectDetail | null> {
   try {
     return await fetchJSON<ProjectDetail>(`/projects/${projectId}`);

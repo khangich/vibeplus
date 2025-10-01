@@ -17,6 +17,9 @@ interface Props {
   projectId?: string;
   compact?: boolean;
 }
+const PUBLIC_API_BASE =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
 
 export function RevisionList({ projectId, compact }: Props) {
   const [revisions, setRevisions] = useState<Revision[]>([]);

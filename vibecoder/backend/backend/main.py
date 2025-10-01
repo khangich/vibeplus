@@ -6,10 +6,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import get_settings
 from .db import init_db
 from .routers import auth, builds, export, generate, health, previews, projects, revisions
+import os
 
 settings = get_settings()
 
 app = FastAPI(title="Vibecoder API", version="0.1.0")
+
+# Read allowed origins from environment
+cors_origins = os.getenv("CORS_ORIGINS", "")
+if cors_origins:
+    origins = [origin.strip() for origin in cors_origins.split(",") if origin.strip()]
+else:
+    # Fallback: allow localhost for dev
+    origins = ["http://localhost:3000"]
 
 app.add_middleware(
     CORSMiddleware,

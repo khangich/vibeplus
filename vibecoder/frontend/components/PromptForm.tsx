@@ -10,6 +10,10 @@ const VIBES = [
   { id: "retro", label: "Retro" },
 ];
 
+const PUBLIC_API_BASE =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
+
 export function PromptForm() {
   const [prompt, setPrompt] = useState("");
   const [vibe, setVibe] = useState("minimal");
@@ -23,7 +27,7 @@ export function PromptForm() {
     setLoading(true);
     try {
       const title = prompt.split(" ").slice(0, 5).join(" ") || "Untitled Project";
-      const project = await postJSON<{ project_id: string }>("/projects", {
+      const project = await postJSON<{ project_id: string }>(`/projects`, {
         title,
       });
       const revision = await postJSON<{ revision_id: string }>(

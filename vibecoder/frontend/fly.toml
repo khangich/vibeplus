@@ -10,7 +10,7 @@ primary_region = 'sjc'
   dockerfile = '../docker/frontend.Dockerfile'
 
 [env]
-  NEXT_PUBLIC_BACKEND_URL = 'https://vibecoder-backend.fly.dev'
+  NEXT_PUBLIC_BACKEND_URL = 'https://vibecoder-backend-plus.fly.dev'
 
 [http_service]
   internal_port = 8080

@@ -3,6 +3,11 @@ import { notFound } from "next/navigation";
 import { DiffViewer } from "@/components/DiffViewer";
 import { fetchJSON } from "@/lib/api";
 
+const PUBLIC_API_BASE =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
+
+
 type RevisionDetail = {
   id: string;
   project_id: string;
