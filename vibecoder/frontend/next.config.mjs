@@ -1,4 +1,4 @@
-const previewHost = process.env.NEXT_PUBLIC_PREVIEW_HOST || "preview.localtest.me";
+const previewHost = process.env.NEXT_PUBLIC_PREVIEW_HOST || "preview.vibe.llmlab.io";
 const backendPreviewBase =
   process.env.BACKEND_INTERNAL_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "http://backend:8000";
 

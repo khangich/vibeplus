@@ -12,6 +12,10 @@ RUN if [ -f package-lock.json ]; then npm ci; else npm install --legacy-peer-dep
 # Copy the rest of the app
 COPY . .
 
+# Provide the backend URL at build time and default it for runtime
+ARG NEXT_PUBLIC_BACKEND_URL
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+
 # Build Next.js
 RUN npm run build
 

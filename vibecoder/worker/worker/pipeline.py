@@ -16,7 +16,7 @@ from backend.backend.db import get_session
 from backend.backend.llm.mock import MockCodeLLM
 from backend.backend.models import Build, Event, Revision
 from backend.backend.storage import put_bytes
-from worker.worker.logger import get_logger
+from .logger import get_logger
 
 logger = get_logger("worker")
 

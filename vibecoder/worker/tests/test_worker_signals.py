@@ -5,7 +5,7 @@ import types
 import pytest
 
 
-MODULE_PATH = "worker.worker.__main__"
+MODULE_PATH = "worker.__main__"
 
 
 @pytest.fixture(autouse=True)
@@ -26,6 +26,10 @@ def stub_rq(monkeypatch):
     monkeypatch.setitem(sys.modules, "backend", backend_pkg)
     monkeypatch.setitem(sys.modules, "backend.backend", backend_backend_pkg)
     monkeypatch.setitem(sys.modules, "backend.backend.db", backend_db_module)
+
+    worker_redis_module = types.ModuleType("worker.redis_client")
+    worker_redis_module.get_redis = lambda: None
+    monkeypatch.setitem(sys.modules, "worker.redis_client", worker_redis_module)
 
     structlog_module = types.ModuleType("structlog")
 
@@ -61,13 +65,16 @@ def stub_rq(monkeypatch):
         "backend",
         "backend.backend",
         "backend.backend.db",
+        "worker.redis_client",
         "structlog",
     ):
         sys.modules.pop(name, None)
 
 
 def _reload_module():
-    module = importlib.import_module(MODULE_PATH)
+    module = importlib.import_module("worker.__main__")
+    if not hasattr(module, "_resolve_signal"):
+        module = importlib.import_module("worker.worker.__main__")
     return importlib.reload(module)
 
 

@@ -26,6 +26,15 @@ fly redis create --name vibecoder-redis --region sjc
 fly launch --name vibecoder-backend-plus --region sjc
 fly postgres attach vibecoder-pg
 fly secrets set --app vibecoder-worker-plus REDIS_URL="redis://default:password@fly-vibecoder-redis.upstash.io:6379"
+
+fly secrets set -a vibecoder-backend-plus OBJECT_STORAGE_BUCKET=vibecoder
+fly secrets set -a vibecoder-backend-plus OBJECT_STORAGE_ENDPOINT=https://s3.us-west-1.amazonaws.com
+
+
+fly secrets set -a vibecoder-backend-plus OBJECT_STORAGE_ACCESS_KEY=
+fly secrets set -a vibecoder-backend-plus OBJECT_STORAGE_SECRET_KEY=
+
+
 fly secrets set OBJECT_STORAGE_* ...
 fly deploy
 
@@ -33,6 +42,15 @@ fly deploy
 fly launch --name vibecoder-worker --region sjc
 fly postgres attach vibecoder-pg
 fly redis attach vibecoder-redis
+fly secrets set -a vibecoder-worker OBJECT_STORAGE_BUCKET=vibecoder
+fly secrets set -a vibecoder-worker OBJECT_STORAGE_ENDPOINT=https://s3.us-west-1.amazonaws.com
+
+
+
+
+fly secrets set -a vibecoder-worker OBJECT_STORAGE_ACCESS_KEY=
+fly secrets set -a vibecoder-worker OBJECT_STORAGE_SECRET_KEY=
+
 fly deploy
 
 # frontend

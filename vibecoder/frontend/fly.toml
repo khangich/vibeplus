@@ -9,8 +9,13 @@ primary_region = 'sjc'
 [build]
   dockerfile = '../docker/frontend.Dockerfile'
 
+[build.args]
+  NEXT_PUBLIC_BACKEND_URL = 'https://vibecoder-backend-plus.fly.dev'
+  PREVIEW_BASE_HOST = 'https://preview.vibe.llmlab.io'
+
 [env]
   NEXT_PUBLIC_BACKEND_URL = 'https://vibecoder-backend-plus.fly.dev'
+  PREVIEW_BASE_HOST = 'https://preview.vibe.llmlab.io'
 
 [http_service]
   internal_port = 8080

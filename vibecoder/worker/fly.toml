@@ -3,6 +3,7 @@ app = "vibecoder-worker"
 primary_region = "sjc"
 
 [build]
+  context = ".."
   dockerfile = "../docker/worker.Dockerfile"  # <- note the ../ and file name
 
 [processes]

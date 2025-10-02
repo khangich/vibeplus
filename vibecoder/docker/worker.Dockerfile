@@ -6,12 +6,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Build context = vibecoder/worker
-# These two lines must match files that exist in THIS folder.
-COPY pyproject.toml ./pyproject.toml
+# Copy backend and worker projects so both can be installed.
+COPY backend ./backend
 COPY worker ./worker
 
 RUN pip install --no-cache-dir -U pip setuptools wheel \
- && pip install --no-cache-dir -e .
+ && pip install --no-cache-dir -e ./backend \
+ && pip install --no-cache-dir -e ./worker
 
 CMD ["python", "-m", "worker"]

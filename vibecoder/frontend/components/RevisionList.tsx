@@ -19,6 +19,7 @@ interface Props {
 }
 const PUBLIC_API_BASE =
   process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+console.log("[RevisionList] PUBLIC_API_BASE", PUBLIC_API_BASE);
 
 
 export function RevisionList({ projectId, compact }: Props) {

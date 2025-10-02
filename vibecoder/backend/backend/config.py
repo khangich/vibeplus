@@ -6,11 +6,11 @@ class Settings(BaseSettings):
     backend_port: int = 8000
     database_url: str = "postgresql+psycopg2://vibecoder:vibecoder@localhost:5432/vibecoder"
     redis_url: str = "redis://localhost:6379/0"
-    object_storage_endpoint: str = "http://localhost:9000"
+    object_storage_endpoint: str = "https://s3.us-west-1.amazonaws.com"
     object_storage_bucket: str = "vibecoder"
     object_storage_access_key: str = "minioadmin"
     object_storage_secret_key: str = "minioadmin"
-    preview_base_host: str = "preview.localtest.me"
+    preview_base_host: str = "preview.vibe.llmlab.io"
     github_token: str | None = None
 
     supabase_url: str | None = None
