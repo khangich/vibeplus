@@ -14,7 +14,14 @@ dependencies = [
   "sqlmodel==0.0.16",
   "pydantic==2.6.4",
   "minio==7.2.6",
+  "openai==1.14.3",
+  "psycopg2-binary==2.9.9",
 ]
 
 [tool.setuptools.packages.find]
 include = ["worker*"]
+
+[tool.pytest.ini_options]
+markers = [
+  "integration: marks tests that exercise external services",
+]

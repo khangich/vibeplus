@@ -4,8 +4,7 @@ from datetime import datetime, timedelta
 
 from redis import Redis
 
-CAPACITY = 20
-REFILL_SECONDS = 24 * 60 * 60
+from .config import get_settings
 
 
 def _bucket_key(user_id: str) -> str:
@@ -13,11 +12,17 @@ def _bucket_key(user_id: str) -> str:
 
 
 def is_rate_limited(redis: Redis, user_id: str) -> bool:
+    settings = get_settings()
+    capacity = settings.rate_limit_capacity
+    refill_seconds = settings.rate_limit_refill_seconds
+    if capacity <= 0:
+        # TODO: should this be True?
+        return False
     key = _bucket_key(user_id)
     tokens = redis.get(key)
     if tokens is None:
         expire_at_midnight(redis, key)
-        redis.set(key, CAPACITY - 1, ex=REFILL_SECONDS)
+        redis.set(key, max(capacity - 1, 0), ex=refill_seconds)
         return False
     remaining = int(tokens)
     if remaining <= 0:

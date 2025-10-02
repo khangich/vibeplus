@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     preview_base_host: str = "preview.vibe.llmlab.io"
     github_token: str | None = None
 
+    rate_limit_capacity: int = 200
+    rate_limit_refill_seconds: int = 24 * 60 * 60
+
     supabase_url: str | None = None
     supabase_anon_key: str | None = None
     clerk_publishable_key: str | None = None
