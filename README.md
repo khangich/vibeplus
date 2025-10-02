@@ -102,3 +102,22 @@ Your database vibecoder-redis is ready. Apps in the personal org can connect to 
 If you have redis-cli installed, use fly redis connect to get a Redis console.
 
 Your database is billed at $0.20 per 100K commands. If you're using Sidekiq or BullMQ, which poll Redis frequently, consider switching to a fixed-price plan. See https://fly.io/docs/reference/redis/#pricing
+
+
+
+
+Config Notes
+
+  - Worker now expects BACKEND_INTERNAL_URL; ensure it points at the backend API.
+  - Preview behavior is controlled by PREVIEW_RUNTIME_MODE (local, set to off to skip) and PREVIEW_PUBLIC_URL_TEMPLATE.
+  - The backend container needs outbound network access the first time each preview runs (npm install).
+
+  Tests
+
+  - cd worker && python -m pytest
+
+  Next Steps
+
+  1. Confirm your local backend (or docker-compose backend) can reach the network to run npm install during preview launches; cache dependencies if installs become slow.
+  2. Decide how previews should be exposed on Fly (e.g. wildcard domain + proxy) and update PREVIEW_PUBLIC_URL_TEMPLATE plus routing once that control plane is ready.
+  3. Add lifecycle management if you need automatic teardown of old preview processes.

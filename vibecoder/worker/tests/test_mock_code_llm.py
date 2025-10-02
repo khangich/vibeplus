@@ -162,7 +162,19 @@ def test_worker_pipeline_generates_artifacts_with_real_openai(monkeypatch):
 
     monkeypatch.setattr(pipeline_module, "put_bytes", _capture_put_bytes)
 
-    settings = SimpleNamespace(preview_base_host="preview.test")
+    preview_url = f"http://preview.test/{revision_id}"
+    launch_calls: list[str] = []
+
+    def _fake_trigger(req_revision_id: str, _settings: object) -> str:
+        launch_calls.append(req_revision_id)
+        return preview_url
+
+    monkeypatch.setattr(pipeline_module, "_trigger_preview_session", _fake_trigger)
+
+    settings = SimpleNamespace(
+        preview_runtime_mode="local",
+        backend_internal_url="http://backend:8000",
+    )
     monkeypatch.setattr(pipeline_module, "get_settings", lambda: settings)
 
     prompt = "Launch a marketing site for a custom pottery studio."
@@ -174,7 +186,7 @@ def test_worker_pipeline_generates_artifacts_with_real_openai(monkeypatch):
             self._revision = revision_obj
             self.build: Build | None = None
             self.added: list[object] = []
-            self.committed = False
+            self.commit_calls = 0
 
         def __enter__(self):
             return self
@@ -205,7 +217,7 @@ def test_worker_pipeline_generates_artifacts_with_real_openai(monkeypatch):
             self.added.append(instance)
 
         def commit(self):
-            self.committed = True
+            self.commit_calls += 1
 
     session = DummySession(revision)
     monkeypatch.setattr(pipeline_module, "get_session", lambda: session)
@@ -233,19 +245,19 @@ def test_worker_pipeline_generates_artifacts_with_real_openai(monkeypatch):
                 break
         assert index_contents is not None and index_contents.strip()
 
-    preview_prefix = f"previews/{revision_id}/"
-    preview_keys = [path for path in captured_puts if path.startswith(preview_prefix)]
-    assert preview_keys
+    manifest_key = f"manifests/{revision_id}.json"
+    assert manifest_key in captured_puts
+    assert captured_puts[manifest_key]["content_type"] == "application/json"
 
     logs_key = f"logs/{revision_id}.log"
     assert logs_key in captured_puts
     assert captured_puts[logs_key]["content_type"] == "text/plain"
 
-    assert session.committed
+    assert launch_calls == [revision_id]
+    assert session.commit_calls == 2
     assert revision.status == "succeeded"
     assert revision.artifact_path == artifact_key
     assert revision.logs_path == logs_key
     assert session.build is not None
     assert session.build.status == "succeeded"
-    expected_preview_url = f"http://{revision_id}.{settings.preview_base_host}:8080/"
-    assert session.build.preview_url == expected_preview_url
+    assert session.build.preview_url == preview_url

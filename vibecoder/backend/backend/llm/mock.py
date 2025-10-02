@@ -286,8 +286,11 @@ class _DeterministicLLM(CodeLLM):
 
 
 def _ensure_required_files(files: dict[str, str], plan: Plan) -> None:
-    if "package.json" not in files:
+    package_json = files.get("package.json")
+    if package_json is None:
         files["package.json"] = _PACKAGE_JSON
+    else:
+        files["package.json"] = _normalize_package_json(package_json)
     required_routes = set(plan.pages) | {"/"}
     for route in required_routes:
         path = _route_to_path(route)
@@ -298,6 +301,35 @@ def _ensure_required_files(files: dict[str, str], plan: Plan) -> None:
             files[path] = _page(title, body, style)
     if "pages/api/health.ts" not in files:
         files["pages/api/health.ts"] = "export default function handler(req, res) { res.status(200).json({ ok: true }); }"
+
+
+def _normalize_package_json(raw_package: str) -> str:
+    try:
+        package_data = json.loads(raw_package)
+    except json.JSONDecodeError:
+        return _PACKAGE_JSON
+
+    if not isinstance(package_data, dict):
+        return _PACKAGE_JSON
+
+    scripts = package_data.setdefault("scripts", {})
+    if not isinstance(scripts, dict):
+        scripts = {}
+        package_data["scripts"] = scripts
+    scripts.setdefault("dev", "next dev")
+    scripts.setdefault("build", "next build")
+    scripts.setdefault("start", "next start")
+
+    dependencies = package_data.setdefault("dependencies", {})
+    if not isinstance(dependencies, dict):
+        dependencies = {}
+        package_data["dependencies"] = dependencies
+
+    dependencies.setdefault("next", "14.2.3")
+    dependencies.setdefault("react", "18.3.1")
+    dependencies.setdefault("react-dom", "18.3.1")
+
+    return json.dumps(package_data, indent=2) + "\n"
 
 
 def _route_to_path(route: str) -> str:

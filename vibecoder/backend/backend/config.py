@@ -11,6 +11,10 @@ class Settings(BaseSettings):
     object_storage_access_key: str = "minioadmin"
     object_storage_secret_key: str = "minioadmin"
     preview_base_host: str = "preview.vibe.llmlab.io"
+    backend_internal_url: str = "http://backend:8000"
+    preview_runtime_mode: str = "local"
+    preview_runtime_root: str = "./runtime/previews"
+    preview_public_url_template: str = "http://localhost:{port}/"
     github_token: str | None = None
 
     rate_limit_capacity: int = 200

@@ -29,7 +29,7 @@ cp .env.example .env
 
 Ensure the `NEXT_PUBLIC_BACKEND_URL` points to the backend service (`http://localhost:8000` when accessed from your browser).
 
-For server-side data fetching inside docker-compose, the frontend container reads `BACKEND_INTERNAL_URL`. Leave it empty for host-based development or set it to `http://backend:8000` (the docker service name) when running the full stack.
+Both the frontend and worker expect `BACKEND_INTERNAL_URL` to resolve to the backend API. Inside docker-compose you can leave it empty for host-based development or set it to `http://backend:8000` (the docker service name) when running the full stack. Remote deployments should point it at the public backend base URL.
 
 ### Local Development
 
@@ -51,7 +51,7 @@ Once the stack is up you can use the UI to enter a prompt, choose a vibe, and ge
 
 ### Preview URLs
 
-Locally, previews are exposed at `http://<revision-id>.preview.localtest.me:8080`. The domain resolves to `127.0.0.1`, allowing multiple previews without additional DNS configuration.
+The preview runtime launches each revision on its own ephemeral localhost port when `PREVIEW_RUNTIME_MODE=local` (set it to `off` to skip launching previews). The linked URL in the UI is generated from `PREVIEW_PUBLIC_URL_TEMPLATE` (default `http://localhost:{port}/`). Update that template when you introduce a wildcard domain or proxy in production. The backend container must have outbound network access so the preview runtime can run `npm install` the first time a revision boots.
 
 ### Testing
 

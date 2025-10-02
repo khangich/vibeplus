@@ -53,3 +53,18 @@ class ExportGithub(BaseModel):
 
 class ExportGithubResponse(BaseModel):
     pr_url: str
+
+
+class PreviewSessionCreate(BaseModel):
+    revision_id: str
+    force_rebuild: bool = False
+
+
+class PreviewSessionRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    revision_id: str
+    status: str
+    url: Optional[str] = None
+    port: Optional[int] = None
+    log_path: Optional[str] = None

@@ -24,12 +24,15 @@ services:
       - OBJECT_STORAGE_ACCESS_KEY=${OBJECT_STORAGE_ACCESS_KEY}
       - OBJECT_STORAGE_SECRET_KEY=${OBJECT_STORAGE_SECRET_KEY}
       - PREVIEW_BASE_HOST=${PREVIEW_BASE_HOST}
+      - BACKEND_INTERNAL_URL=${BACKEND_INTERNAL_URL:-http://backend:8000}
     ports:
       - "8000:8000"
     depends_on:
       - postgres
       - redis
       - minio
+    volumes:
+      - ./runtime:/app/runtime
 
   worker:
     build:
@@ -44,6 +47,7 @@ services:
       - OBJECT_STORAGE_ACCESS_KEY=${OBJECT_STORAGE_ACCESS_KEY}
       - OBJECT_STORAGE_SECRET_KEY=${OBJECT_STORAGE_SECRET_KEY}
       - PREVIEW_BASE_HOST=${PREVIEW_BASE_HOST}
+      - BACKEND_INTERNAL_URL=${BACKEND_INTERNAL_URL:-http://backend:8000}
     depends_on:
       - backend
       - postgres

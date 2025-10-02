@@ -6,6 +6,9 @@ primary_region = "sjc"
   context = ".."
   dockerfile = "../docker/worker.Dockerfile"  # <- note the ../ and file name
 
+[env]
+  BACKEND_INTERNAL_URL = "https://vibecoder-backend-plus.fly.dev"
+
 [processes]
   worker = "python -m worker"
 

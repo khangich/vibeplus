@@ -46,3 +46,15 @@ class Event(SQLModel, table=True):
     kind: str
     payload_json: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class PreviewSession(SQLModel, table=True):
+    id: str = Field(default_factory=lambda: datetime.utcnow().strftime("prv%Y%m%d%H%M%S%f"), primary_key=True)
+    revision_id: str = Field(index=True, unique=True)
+    status: str = Field(default="pending")
+    port: Optional[int] = None
+    url: Optional[str] = None
+    process_id: Optional[int] = None
+    log_path: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
